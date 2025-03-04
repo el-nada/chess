@@ -29,7 +29,7 @@ class Dragger :
         self.dragging = False 
 
     def update_blit(self, surface): 
-        self.piece.set_texture(size=128) #change the size
+        self.piece.set_texture(size=120) #change the size
         texture = self.piece.texture
         img = pygame.image.load(texture)
         img_center = (self.mouseX, self.mouseY)

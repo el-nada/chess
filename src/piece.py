@@ -15,10 +15,10 @@ class Piece:
         self.set_texture()
         self.texture_rext= texture_rect
 
-    def set_texture(self, size=80): 
+    def set_texture(self, size=100): 
         # the size will be useful later for animations
         self.texture = os.path.join(
-            f'assets/images/{self.color}_{self.name}.png'
+            f'assets/images/img_{size}/{self.color}_{self.name}.png'
         )
     
     def add_moves(self, move): 

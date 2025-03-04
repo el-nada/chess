@@ -46,6 +46,7 @@ class Main :
                             dragger.drag_piece(piece)
                 
                             game.show_bg(screen)
+                            game.show_last_move(screen)
                             game.show_moves(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
