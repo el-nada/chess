@@ -28,7 +28,7 @@ class Main :
             game.show_moves(screen)
             game.show_hover(screen)
             game.show_pieces(screen)
-            game.show_info(screen)
+            game.show_info(screen, self.info_board )
 
             if game.board.in_check_mate("white"): 
                 print("hello")
@@ -60,7 +60,7 @@ class Main :
                             game.show_moves(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
-                            game.show_captured(screen)
+                            game.show_captured(screen, self.info_board)
 
 
                 elif event.type == pygame.MOUSEMOTION: 
@@ -76,7 +76,7 @@ class Main :
                         game.show_moves(screen)
                         game.show_hover(screen)
                         game.show_pieces(screen)
-                        game.show_info(screen)
+                        game.show_info(screen, self.info_board )
                         dragger.update_blit(screen) 
                         
 
@@ -94,15 +94,13 @@ class Main :
                             captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
                             info_board.capture(piece.color,captured)
-                            print(captured)
-                            print(piece.color)
 
                             game.sound_effect(captured)
                             game.show_bg(screen)
                             game.show_last_move(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
-                            game.show_info(screen)
+                            game.show_info(screen, self.info_board )
                             game.next_turn()
 
                     dragger.undrag_piece()

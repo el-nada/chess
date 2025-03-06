@@ -13,7 +13,6 @@ class Game :
         self.dragger = Dragger()
         self.next_player = "white"
         self.hover_sqr = None
-        self.info= Info_board()
         pygame.font.init() 
         self.my_font = pygame.font.SysFont('Comic Sans MS', 40)
 
@@ -81,7 +80,7 @@ class Game :
             sound_move = Sound(os.path.join("assets/sounds/move.wav"))
             sound_move.play()
 
-    def show_info(self, surface): 
+    def show_info(self, surface, info): 
         
         color = background
         rect = (800, 0,400, HEIGHT )
@@ -91,7 +90,7 @@ class Game :
 
         self.show_turn(surface)
         self.show_timer(surface)
-        self.show_captured(surface)
+        self.show_captured(surface, info)
 
     def show_turn(self, surface): 
         text_surface = self.my_font.render(f"Turn : {self.next_player}", False, (250,250,250))
@@ -100,8 +99,8 @@ class Game :
     def show_timer(self, surface): 
         pass 
 
-    def show_captured(self, surface): 
-        text_surface = self.my_font.render(f"Captured : {self.info.captured_pink}", False, (250,250,250)) if self.next_player == "pink" else self.my_font.render(f"Captured : {self.info.captured_white}", False, (250,250,250))
+    def show_captured(self, surface, info): 
+        text_surface = self.my_font.render(f"Captured : {info.captured_pink}", False, (250,250,250)) if self.next_player == "pink" else self.my_font.render(f"Captured : {info.captured_white}", False, (250,250,250))
         surface.blit(text_surface, ((WIDTH-(I_WIDTH+text_surface.get_width())/2),200))
 
     def reset(self): 
