@@ -5,7 +5,7 @@ from game import Game
 from dragger import *
 from square import *
 from move import *
-
+from info_board import *
 class Main : 
 
     def __init__(self): 
@@ -13,12 +13,14 @@ class Main :
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption('Chess')
         self.game=Game()
+        self.info_board = Info_board()
 
     def mainloop(self): 
         screen = self.screen
         game = self.game 
         dragger = self.game.dragger
         board = self.game.board
+        info_board = self.info_board
 
         while True : 
             game.show_bg(screen)
@@ -26,6 +28,14 @@ class Main :
             game.show_moves(screen)
             game.show_hover(screen)
             game.show_pieces(screen)
+            game.show_info(screen)
+
+            if game.board.in_check_mate("white"): 
+                print("hello")
+                game.reset()
+                game = self.game 
+                dragger = self.game.dragger
+                board = self.game.board
 
             if dragger.dragging : 
                 dragger.update_blit(screen)
@@ -37,7 +47,7 @@ class Main :
                     clicked_row = dragger.mouseY //SQSIZE
                     clicked_col = dragger.mouseX // SQSIZE
 
-                    if board.squares[clicked_row][clicked_col].has_piece(): 
+                    if clicked_col<8 and clicked_row<8 and board.squares[clicked_row][clicked_col].has_piece(): 
                         piece = board.squares[clicked_row][clicked_col].piece
 
                         if piece.color == game.next_player : 
@@ -50,12 +60,13 @@ class Main :
                             game.show_moves(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
+                            game.show_captured(screen)
 
 
                 elif event.type == pygame.MOUSEMOTION: 
                     motion_row = event.pos[1]//SQSIZE
                     motion_col = event.pos[0]//SQSIZE
-
+                    
                     game.set_hover(motion_row, motion_col)
 
                     if dragger.dragging: 
@@ -65,6 +76,7 @@ class Main :
                         game.show_moves(screen)
                         game.show_hover(screen)
                         game.show_pieces(screen)
+                        game.show_info(screen)
                         dragger.update_blit(screen) 
                         
 
@@ -81,13 +93,16 @@ class Main :
                         if board.valid_move(dragger.piece, move): 
                             captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
-                            game.sound_effect(captured)
+                            info_board.capture(piece.color,captured)
+                            print(captured)
+                            print(piece.color)
 
+                            game.sound_effect(captured)
                             game.show_bg(screen)
                             game.show_last_move(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
-
+                            game.show_info(screen)
                             game.next_turn()
 
                     dragger.undrag_piece()

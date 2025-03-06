@@ -54,6 +54,7 @@ class Board :
             if self.castling(initial, final): 
                 dif = final.col - initial.col
                 rook = piece.left_rook if (dif<0) else piece.right_rook
+                
                 self.move(rook, rook.moves[-1])
 
         piece.moved = True
@@ -204,12 +205,13 @@ class Board :
 
             if not piece.moved : 
                 if isinstance(self.squares[row][0].piece, Rook) and not self.squares[row][0].piece.moved :
+                    left_rook = self.squares[row][0].piece
                     for move_col in range(1, 4): 
 
                         if self.squares[row][move_col].is_empty(): 
 
                                 if move_col==3: 
-                                    piece.left_rook = self.squares[row][0].piece
+                                    piece.left_rook = left_rook
 
                                     initial = Square(row, 0)
                                     final =Square(row, 3)
@@ -222,26 +224,30 @@ class Board :
                                     move_king = Move(initial, final)
 
                                     # check for potential check
+                                    left_rook.add_moves(move_rook)
+
                                     if check : 
-                                        if not self.in_check(piece, move_king) and not self.in_check(piece.left_rook, move_rook) :
-                                            
-                                            piece.left_rook.add(move_rook)
+                                        if not self.in_check(piece, move_king) and not self.in_check(left_rook, move_rook) :
+                                            left_rook.add_moves(move_rook)
                                             piece.add_moves(move_king)
 
                                     else : 
-                                        piece.left_rook.add(move_rook)
-                                        piece.add_moves(move)
+                                        left_rook.add_moves(move_rook)
+                                        piece.add_moves(move_king)
+
+                                    left_rook.moves.remove(move_rook)
 
                         else : 
                             break
 
-                if isinstance(self.squares[row][7].piece, Rook) and not self.squares[row][0].piece.moved :
+                if isinstance(self.squares[row][7].piece, Rook) and not self.squares[row][7].piece.moved :
+                    right_rook = self.squares[row][7].piece
                     for move_col in range(5, 7): 
 
                         if self.squares[row][move_col].is_empty(): 
 
                                 if move_col==6: 
-                                    piece.right_rook = self.squares[row][7].piece
+                                    piece.right_rook = right_rook
 
                                     initial = Square(row, 7)
                                     final =Square(row, 5)
@@ -254,16 +260,19 @@ class Board :
                                     move_king = Move(initial, final)
 
                                     # check for potential check
+                                    right_rook.add_moves(move_rook)
+
                                     if check : 
-                                        if not self.in_check(piece, move_king) and not self.in_check(piece.right_rook, move_rook) :
+                                        if not self.in_check(piece, move_king) and not self.in_check(right_rook, move_rook) :
                                             
-                                            piece.left_rook.add(move_rook)
+                                            right_rook.add_moves(move_rook)
                                             piece.add_moves(move_king)
 
                                     else : 
-                                        piece.left_rook.add(move_rook)
-                                        piece.add_moves(move)
+                                        right_rook.add_moves(move_rook)
+                                        piece.add_moves(move_king)
 
+                                    right_rook.moves.remove(move_rook)
                         else : 
                             break
 
@@ -290,3 +299,20 @@ class Board :
                         if isinstance(m.final.piece, King): 
                             return True
         return False
+    
+    def in_check_mate(self, color): 
+        temp_board = copy.deepcopy(self)
+        
+        for row in range(ROW): 
+            for col in range(COL): 
+                if temp_board.squares[row][col].has_team_piece(color): 
+                    temp_piece = copy.deepcopy(temp_board.squares[row][col].piece)
+
+                    temp_board.calc_moves(temp_piece, row, col)
+
+                    if(not temp_piece.moves!= []): 
+                        return False
+                    
+        return True 
+
+

@@ -1,2 +1,4 @@
 - do unit tests (especially for check)
 - do pawn en passant 
+- add an info board to see who won, who lost, draws  
+- fix castling 
