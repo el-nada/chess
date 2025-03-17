@@ -20,7 +20,7 @@ class Main :
         game = self.game 
         dragger = self.game.dragger
         board = self.game.board
-        info_board = self.info_board
+        #info_board = self.info_board
 
         while True : 
             game.show_bg(screen)
@@ -28,14 +28,10 @@ class Main :
             game.show_moves(screen)
             game.show_hover(screen)
             game.show_pieces(screen)
-            game.show_info(screen, self.info_board )
+            #game.show_info(screen, self.info_board )
 
-            if game.board.in_check_mate("white"): 
+            if game.board.in_check_mate("white") or game.board.in_check_mate("pink"): 
                 print("hello")
-                game.reset()
-                game = self.game 
-                dragger = self.game.dragger
-                board = self.game.board
 
             if dragger.dragging : 
                 dragger.update_blit(screen)
@@ -60,7 +56,7 @@ class Main :
                             game.show_moves(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
-                            game.show_captured(screen, self.info_board)
+                            #game.show_captured(screen, self.info_board)
 
 
                 elif event.type == pygame.MOUSEMOTION: 
@@ -76,7 +72,7 @@ class Main :
                         game.show_moves(screen)
                         game.show_hover(screen)
                         game.show_pieces(screen)
-                        game.show_info(screen, self.info_board )
+                        #game.show_info(screen, self.info_board )
                         dragger.update_blit(screen) 
                         
 
@@ -93,14 +89,14 @@ class Main :
                         if board.valid_move(dragger.piece, move): 
                             captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
-                            info_board.capture(piece.color,captured)
+                           #info_board.capture(piece.color,captured)
 
                             game.sound_effect(captured)
                             game.show_bg(screen)
                             game.show_last_move(screen)
                             game.show_hover(screen)
                             game.show_pieces(screen)
-                            game.show_info(screen, self.info_board )
+                            #game.show_info(screen, self.info_board )
                             game.next_turn()
 
                     dragger.undrag_piece()

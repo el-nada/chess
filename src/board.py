@@ -283,36 +283,47 @@ class Board :
     def castling(self, initial, final): 
         return abs(initial.col -final.col)==2 
     
-    def in_check(self, piece, move): 
+    def in_check(self, piece, move):
+        # Simulate the move on a temporary board
         temp_board = copy.deepcopy(self)
         temp_piece = copy.deepcopy(piece)
-
         temp_board.move(temp_piece, move)
 
-        for row in range(ROW): 
-            for col in range(COL): 
-                if temp_board.squares[row][col].has_rival_piece(temp_piece.color): 
-                    p = temp_board.squares[row][col].piece
-
-                    temp_board.calc_moves(p, row, col, False)
-                    for m in p.moves : 
-                        if isinstance(m.final.piece, King): 
+        return temp_board.is_king_in_check(temp_piece.color)
+    
+    def is_king_in_check(self, color):
+        king_pos = None
+        for row in range(ROW):
+            for col in range(COL):
+                piece = self.squares[row][col].piece
+                if isinstance(piece, King) and piece.color == color:
+                    king_pos = (row, col)
+                    break
+            if king_pos:
+                break
+    
+        for row in range(ROW):
+            for col in range(COL):
+                piece = self.squares[row][col].piece
+                if piece and piece.color != color:
+                    self.calc_moves(piece, row, col, check=False)
+                    for move in piece.moves:
+                        if (move.final.row, move.final.col) == king_pos:
                             return True
         return False
     
-    def in_check_mate(self, color): 
+    def in_check_mate(self, color):
         temp_board = copy.deepcopy(self)
-        
-        for row in range(ROW): 
-            for col in range(COL): 
-                if temp_board.squares[row][col].has_team_piece(color): 
-                    temp_piece = copy.deepcopy(temp_board.squares[row][col].piece)
+        if not temp_board.is_king_in_check(color):
+            return False
 
-                    temp_board.calc_moves(temp_piece, row, col)
-
-                    if(not temp_piece.moves!= []): 
+        for row in range(ROW):
+            for col in range(COL):
+                if temp_board.squares[row][col].has_team_piece(color):
+                    piece = temp_board.squares[row][col].piece
+                    temp_board.calc_moves(piece, row, col, check=True)
+                    if piece.moves:  
                         return False
-                    
-        return True 
+        return True  
 
 
