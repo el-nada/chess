@@ -79,7 +79,7 @@ class Board :
                             final_piece = self.squares[possible_move_r][possible_move_c].piece
                             final =Square( possible_move_r, possible_move_c, final_piece)
 
-                            move = Move(initial, final)
+                            move = Move(initial, final, piece)
                             # check for potential check
                             if check : 
                                 if not self.in_check(piece, move):
@@ -110,7 +110,7 @@ class Board :
                         initial = Square(row, col)
                         final =Square( move_row, col)
 
-                        move = Move(initial, final)
+                        move = Move(initial, final, piece)
 
                         # check for potential check
                         if check : 
@@ -136,7 +136,7 @@ class Board :
                         final_piece = self.squares[possible_move_r][possible_move_c].piece
                         final =Square( possible_move_r, possible_move_c, final_piece)
 
-                        move = Move(initial, final)
+                        move = Move(initial, final, piece)
                         # check for potential check
                         if check : 
                             if not self.in_check(piece, move):
@@ -160,7 +160,7 @@ class Board :
                         final_piece = self.squares[possible_move_r][possible_move_c].piece
                         final =Square( possible_move_r, possible_move_c, final_piece)
 
-                        move = Move(initial, final)
+                        move = Move(initial, final, piece)
 
                         # check for potential check
                         if check : 
@@ -192,7 +192,7 @@ class Board :
                         initial = Square(row, col)
                         final =Square( possible_move_r, possible_move_c)
 
-                        move = Move(initial, final)
+                        move = Move(initial, final, piece)
                         # check for potential check
                         if check : 
                             if not self.in_check(piece, move):
@@ -216,12 +216,12 @@ class Board :
                                     initial = Square(row, 0)
                                     final =Square(row, 3)
 
-                                    move_rook = Move(initial, final)
+                                    move_rook = Move(initial, final , piece.left_rook)
 
                                     initial = Square(row, col)
                                     final =Square(row, 2)
 
-                                    move_king = Move(initial, final)
+                                    move_king = Move(initial, final, piece)
 
                                     # check for potential check
                                     left_rook.add_moves(move_rook)
@@ -252,12 +252,12 @@ class Board :
                                     initial = Square(row, 7)
                                     final =Square(row, 5)
 
-                                    move_rook = Move(initial, final)
+                                    move_rook = Move(initial, final, piece.right_rook)
 
                                     initial = Square(row, col)
                                     final =Square(row, 6)
 
-                                    move_king = Move(initial, final)
+                                    move_king = Move(initial, final, piece)
 
                                     # check for potential check
                                     right_rook.add_moves(move_rook)

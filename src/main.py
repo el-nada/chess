@@ -6,6 +6,7 @@ from dragger import *
 from square import *
 from move import *
 from info_board import *
+from AIplayer import *
 class Main : 
 
     def __init__(self): 
@@ -13,6 +14,7 @@ class Main :
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption('Chess')
         self.game=Game()
+        self.ai = None
         self.info_board = Info_board()
 
     def mainloop(self): 
@@ -20,6 +22,7 @@ class Main :
         game = self.game 
         dragger = self.game.dragger
         board = self.game.board
+        ai = self.ai
         #info_board = self.info_board
 
         while True : 
@@ -98,6 +101,8 @@ class Main :
                             game.show_pieces(screen)
                             #game.show_info(screen, self.info_board )
                             game.next_turn()
+                            if (not ai): 
+                                ai.choose_move(board)
 
                     dragger.undrag_piece()
 
@@ -107,6 +112,14 @@ class Main :
                         game = self.game 
                         dragger = self.game.dragger
                         board = self.game.board
+
+                    elif event.key == pygame.K_m : # Press the m key to play the min max ai-player
+                        print("holallala")
+                        game.reset()
+                        game = self.game 
+                        dragger = self.game.dragger
+                        board = self.game.board
+                        ai = MinimaxAI("pink")
 
                 elif  event.type == pygame.QUIT : 
                     pygame.quit()
